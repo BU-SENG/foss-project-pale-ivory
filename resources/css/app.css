@@ -49,7 +49,7 @@ body {
     border: none;
     padding: 12px 24px;
     border-radius: var(--radius);
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: background 0.2s;
     display: inline-flex;
