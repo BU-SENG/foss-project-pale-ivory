@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Pale Ivory</title>
+    <title>Admin Dashboard - BUEPS</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
         <!-- Mobile Header -->
         <header class="mobile-header">
             <button id="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
-            <span class="brand">Pale Ivory Admin</span>
+            <span class="brand">BUEPS Admin</span>
             <div class="user-avatar-sm"><i class="fa-regular fa-user"></i></div>
         </header>
 
@@ -21,7 +21,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <i class="fa-solid fa-graduation-cap"></i>
-                <span>Pale Ivory</span>
+                <span>BUEPS</span>
                 <button id="close-sidebar-btn" class="mobile-only"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
