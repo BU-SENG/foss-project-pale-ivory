@@ -45,21 +45,26 @@
                 </a>
 
                 <!-- Super Admin Only -->
-                <a href="#" class="nav-item super-admin-only hidden" data-target="super-admin-view">
+                @if($user->role === 'superadmin')
+                <a href="#" class="nav-item super-admin-only" data-target="super-admin-view">
                     <i class="fa-solid fa-user-shield"></i>
                     <span>Manage Admins</span>
                 </a>
+                @endif
             </nav>
 
             <div class="sidebar-footer">
                 <div class="user-info">
                     <div class="user-avatar"><i class="fa-regular fa-user"></i></div>
                     <div class="user-details">
-                        <span id="current-username">Admin</span>
-                        <span id="current-role">Role</span>
+                        <span id="current-username">{{ $user->name }}</span>
+                        <span id="current-role">{{ $user->role === 'superadmin' ? 'Super Admin' : 'Entrepreneurship Admin' }}</span>
                     </div>
                 </div>
-                <button id="logout-btn" class="btn-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </form>
             </div>
         </aside>
 

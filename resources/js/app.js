@@ -8,33 +8,17 @@ const INITIAL_TRADES = [
     { id: 4, name: 'Web Design', capacity: 25, enrolled: 0 }
 ];
 
-const INITIAL_ADMINS = [
-    { username: 'admin', password: 'password', role: 'admin' }, // Entrepreneurship Admin
-    { username: 'super', password: 'password', role: 'superadmin' } // Super Admin
-];
-
-// State Management
-let currentUser = null;
-
 // LocalStorage Helpers
 const Storage = {
     getTrades: () => JSON.parse(localStorage.getItem('trades')) || INITIAL_TRADES,
     setTrades: (trades) => localStorage.setItem('trades', JSON.stringify(trades)),
     
-    getAdmins: () => JSON.parse(localStorage.getItem('admins')) || INITIAL_ADMINS,
-    setAdmins: (admins) => localStorage.setItem('admins', JSON.stringify(admins)),
-    
     getStudents: () => JSON.parse(localStorage.getItem('students')) || [],
     setStudents: (students) => localStorage.setItem('students', JSON.stringify(students)),
-    
-    getCurrentUser: () => JSON.parse(sessionStorage.getItem('currentUser')),
-    setCurrentUser: (user) => sessionStorage.setItem('currentUser', JSON.stringify(user)),
-    clearSession: () => sessionStorage.removeItem('currentUser')
 };
 
 // Initialize Data if empty
 if (!localStorage.getItem('trades')) Storage.setTrades(INITIAL_TRADES);
-if (!localStorage.getItem('admins')) Storage.setAdmins(INITIAL_ADMINS);
 
 // DOM Elements & Page Detection
 const pages = {
@@ -73,7 +57,6 @@ function navigateAdminContent(targetId) {
     // Refresh data
     if (targetId === 'admin-trades-view') renderTradesTable();
     if (targetId === 'admin-students-view') renderStudentsTable();
-    if (targetId === 'super-admin-view') renderAdminsTable();
     if (targetId === 'admin-dashboard-home') updateDashboardStats();
 
     // Close sidebar on mobile
@@ -83,41 +66,7 @@ function navigateAdminContent(targetId) {
     }
 }
 
-// Authentication Logic
-function login(username, password, role) {
-    const admins = Storage.getAdmins();
-    const admin = admins.find(a => a.username === username && a.password === password && a.role === role);
-    
-    if (admin) {
-        currentUser = admin;
-        Storage.setCurrentUser(currentUser);
-        window.location.href = '/admin/dashboard'; // Updated for Laravel Route
-    } else {
-        alert('Invalid credentials or role selection.');
-    }
-}
 
-function logout() {
-    Storage.clearSession();
-    currentUser = null;
-    window.location.href = '/admin/login'; // Updated for Laravel Route
-}
-
-function setupAdminUI(user) {
-    const usernameEl = document.getElementById('current-username');
-    const roleEl = document.getElementById('current-role');
-    
-    if(usernameEl) usernameEl.textContent = user.username;
-    if(roleEl) roleEl.textContent = user.role === 'superadmin' ? 'Super Admin' : 'Entrepreneurship Admin';
-
-    // Role Based Access
-    const superAdminLinks = document.querySelectorAll('.super-admin-only');
-    if (user.role === 'superadmin') {
-        superAdminLinks.forEach(el => el.classList.remove('hidden'));
-    } else {
-        superAdminLinks.forEach(el => el.classList.add('hidden'));
-    }
-}
 
 // Modal Logic
 window.toggleModal = function(modalId) {
@@ -133,13 +82,6 @@ window.toggleModal = function(modalId) {
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Dashboard Logic
     if (pages.dashboard) {
-        const savedUser = Storage.getCurrentUser();
-        if (!savedUser) {
-            window.location.href = '/admin/login'; // Updated for Laravel Route
-            return;
-        }
-        currentUser = savedUser;
-        setupAdminUI(currentUser);
         updateDashboardStats();
 
         // Admin Sidebar Navigation
@@ -156,10 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeBtn = document.getElementById('close-sidebar-btn');
         if(menuBtn) menuBtn.addEventListener('click', () => document.getElementById('sidebar').classList.add('open'));
         if(closeBtn) closeBtn.addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
-
-        // Logout
-        const logoutBtn = document.getElementById('logout-btn');
-        if(logoutBtn) logoutBtn.addEventListener('click', logout);
 
         // Admin Forms
         const addTradeForm = document.getElementById('add-trade-form');
@@ -179,40 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const createAdminForm = document.getElementById('create-admin-form');
-        if(createAdminForm) {
-            createAdminForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const user = document.getElementById('new-admin-user').value;
-                const pass = document.getElementById('new-admin-pass').value;
-                const role = document.getElementById('new-admin-role').value;
 
-                const admins = Storage.getAdmins();
-                if (admins.some(a => a.username === user)) {
-                    alert('Username already exists');
-                    return;
-                }
-
-                admins.push({ username: user, password: pass, role });
-                Storage.setAdmins(admins);
-                
-                renderAdminsTable();
-                toggleModal('add-admin-modal');
-                e.target.reset();
-            });
-        }
     }
 
-    // 2. Login Logic
-    if (pages.login) {
-        pages.login.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = document.getElementById('login-id').value;
-            const pass = document.getElementById('login-pass').value;
-            const role = document.getElementById('login-role').value;
-            login(id, pass, role);
-        });
-    }
+
+
 
     // 3. Registration Logic
     if (pages.registration) {
@@ -380,27 +289,6 @@ function renderStudentsTable() {
     });
 }
 
-function renderAdminsTable() {
-    const admins = Storage.getAdmins();
-    const tbody = document.querySelector('#admins-table tbody');
-    if(!tbody) return;
-
-    tbody.innerHTML = '';
-    
-    admins.forEach(a => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${a.username}</td>
-            <td><span style="text-transform: capitalize;">${a.role}</span></td>
-            <td>-</td>
-            <td>
-                ${a.role !== 'superadmin' ? `<button class="btn-danger" onclick="deleteAdmin('${a.username}')">Remove</button>` : '<span style="color: #ccc;">Protected</span>'}
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
 // Global Actions
 window.deleteTrade = function(id) {
     if(!confirm('Delete this trade?')) return;
@@ -409,12 +297,4 @@ window.deleteTrade = function(id) {
     Storage.setTrades(trades);
     renderTradesTable();
     updateDashboardStats();
-}
-
-window.deleteAdmin = function(username) {
-    if(!confirm('Remove this admin?')) return;
-    let admins = Storage.getAdmins();
-    admins = admins.filter(a => a.username !== username);
-    Storage.setAdmins(admins);
-    renderAdminsTable();
 }

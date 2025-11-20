@@ -15,23 +15,15 @@
                 <h2>Admin Portal</h2>
                 <p>Please sign in to continue</p>
             </div>
-            <form id="login-form">
+            <form action="{{ route('admin.login.submit') }}" method="POST">
+                @csrf
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="login-id" required>
+                    <label>Email</label>
+                    <input type="email" name="email" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="login-pass" required>
-                </div>
-                <div class="form-group">
-                    <label>Role</label>
-                    <div class="select-wrapper">
-                        <select id="login-role">
-                            <option value="admin">Entrepreneurship Admin</option>
-                            <option value="superadmin">Super Admin</option>
-                        </select>
-                    </div>
+                    <input type="password" name="password" required>
                 </div>
                 <button type="submit" class="btn-primary full-width">Login</button>
             </form>
