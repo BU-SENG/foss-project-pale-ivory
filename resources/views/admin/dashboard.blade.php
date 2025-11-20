@@ -74,7 +74,7 @@
             <section id="admin-dashboard-home" class="content-section active">
                 <div class="section-header">
                     <h1>Dashboard Overview</h1>
-                    <p>Welcome back to the administration panel.</p>
+                    <p>Welcome back to the Administration Panel.</p>
                 </div>
                 
                 <div class="stats-grid">
@@ -205,7 +205,7 @@
                 <div class="section-header">
                     <h1>System Administrators</h1>
                     <button class="btn-primary" onclick="toggleModal('add-admin-modal')">
-                        <i class="fa-solid fa-user-plus"></i> New Admin
+                        <i class="fa-solid fa-user-plus"></i>Add New Admin
                     </button>
                 </div>
 
