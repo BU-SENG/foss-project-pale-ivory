@@ -22,13 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'trade_id',
     ];
-
-    public function trade()
-    {
-        return $this->belongsTo(Trade::class);
-    }
 
     /**
      * The attributes that should be hidden for serialization.

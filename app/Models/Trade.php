@@ -8,8 +8,8 @@ class Trade extends Model
 {
     protected $fillable = ['name', 'capacity'];
 
-    public function users()
+    public function students()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Student::class);
     }
 }

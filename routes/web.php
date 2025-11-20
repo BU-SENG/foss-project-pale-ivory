@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [StudentController::class, 'show'])->name('home');
+Route::post('/register', [StudentController::class, 'store'])->name('student.register');
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.submit');

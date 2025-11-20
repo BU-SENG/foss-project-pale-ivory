@@ -1,25 +1,5 @@
 import './bootstrap';
 
-// Mock Data Initialization
-const INITIAL_TRADES = [
-    { id: 1, name: 'Tie and Dye', capacity: 50, enrolled: 0 },
-    { id: 2, name: 'Photography', capacity: 30, enrolled: 0 },
-    { id: 3, name: 'Baking', capacity: 40, enrolled: 0 },
-    { id: 4, name: 'Web Design', capacity: 25, enrolled: 0 }
-];
-
-// LocalStorage Helpers
-const Storage = {
-    getTrades: () => JSON.parse(localStorage.getItem('trades')) || INITIAL_TRADES,
-    setTrades: (trades) => localStorage.setItem('trades', JSON.stringify(trades)),
-    
-    getStudents: () => JSON.parse(localStorage.getItem('students')) || [],
-    setStudents: (students) => localStorage.setItem('students', JSON.stringify(students)),
-};
-
-// Initialize Data if empty
-if (!localStorage.getItem('trades')) Storage.setTrades(INITIAL_TRADES);
-
 // DOM Elements & Page Detection
 const pages = {
     login: document.getElementById('login-form'),
@@ -54,19 +34,12 @@ function navigateAdminContent(targetId) {
         }
     });
 
-    // Refresh data - REMOVED
-    // if (targetId === 'admin-trades-view') renderTradesTable();
-    // if (targetId === 'admin-students-view') renderStudentsTable();
-    // if (targetId === 'admin-dashboard-home') updateDashboardStats();
-
     // Close sidebar on mobile
     if (window.innerWidth <= 768) {
         const sidebar = document.getElementById('sidebar');
         if(sidebar) sidebar.classList.remove('open');
     }
 }
-
-
 
 // Modal Logic
 window.toggleModal = function(modalId) {
@@ -82,7 +55,6 @@ window.toggleModal = function(modalId) {
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Dashboard Logic
     if (pages.dashboard) {
-        // updateDashboardStats(); // REMOVED
 
         // Admin Sidebar Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -99,62 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if(menuBtn) menuBtn.addEventListener('click', () => document.getElementById('sidebar').classList.add('open'));
         if(closeBtn) closeBtn.addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
 
-        // Admin Forms - REMOVED
-    }
-
-
-
-
-    // 3. Registration Logic
-    if (pages.registration) {
-        populateTradeDropdown();
-        
-        pages.registration.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const tradeName = document.getElementById('reg-trade').value;
-            
-            // Check capacity again
-            const trades = Storage.getTrades();
-            const selectedTrade = trades.find(t => t.name === tradeName);
-            
-            if (!selectedTrade) {
-                alert('Please select a valid trade.');
-                return;
-            }
-
-            if (selectedTrade.enrolled >= selectedTrade.capacity) {
-                alert('Sorry, this trade is fully booked.');
-                return;
-            }
-
-            const studentData = {
-                name: document.getElementById('reg-name').value,
-                matric: document.getElementById('reg-matric').value,
-                email: document.getElementById('reg-email').value,
-                phone: document.getElementById('reg-phone').value,
-                dept: document.getElementById('reg-dept').value,
-                level: document.getElementById('reg-level').value,
-                trade: tradeName,
-                paymentStatus: 'Pending', // In real app, this updates after Paystack callback
-                date: new Date().toLocaleDateString()
-            };
-
-            // Simulate Paystack Redirect
-            if(confirm(`Proceed to pay ₦5,000 for ${tradeName} via Paystack?`)) {
-                // Save Student
-                const students = Storage.getStudents();
-                students.push(studentData);
-                Storage.setStudents(students);
-
-                // Update Trade Count
-                selectedTrade.enrolled++;
-                Storage.setTrades(trades);
-
-                alert('Payment Successful! Registration Complete.');
-                e.target.reset();
-                populateTradeDropdown(); // Refresh capacities
-            }
-        });
     }
 });
 
@@ -187,21 +103,4 @@ function populateTradeDropdown() {
             hint.textContent = `${t.capacity - t.enrolled} spots remaining out of ${t.capacity}`;
         }
     };
-}
-
-function updateDashboardStats() {
-    // Removed: Handled by Laravel
-}
-
-function renderTradesTable() {
-    // Removed: Handled by Laravel
-}
-
-function renderStudentsTable() {
-    // Removed: Handled by Laravel
-}
-
-// Global Actions
-window.deleteTrade = function(id) {
-    // Removed: Handled by Laravel
 }

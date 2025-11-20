@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,8 +14,8 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::guard('admin')->user();
-        $trades = Trade::withCount('users')->get();
-        $students = User::where('role', 'student')->with('trade')->get();
+        $trades = Trade::withCount('students')->get();
+        $students = Student::with('trade')->get();
         $admins = User::whereIn('role', ['admin', 'superadmin'])->get();
 
         $totalStudents = $students->count();

@@ -20,37 +20,38 @@
                     <p>Register for your trade and make payment securely.</p>
                 </div>
 
-                <form id="registration-form">
+                <form id="registration-form" action="{{ route('student.register') }}" method="POST">
+                    @csrf
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text" id="reg-name" placeholder="e.g. Stephanie Umukoro" required>
+                        <input type="text" name="name" id="reg-name" placeholder="e.g. Stephanie Umukoro" required>
                     </div>
 
                     <div class="form-group">
                         <label>Matric Number</label>
-                        <input type="text" id="reg-matric" placeholder="e.g. 22/0096" required>
+                        <input type="text" name="matric_number" id="reg-matric" placeholder="e.g. 22/0096" required>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group half">
                             <label>Email Address</label>
-                            <input type="email" id="reg-email" placeholder="student@example.com" required>
+                            <input type="email" name="email" id="reg-email" placeholder="student@example.com" required>
                         </div>
                         <div class="form-group half">
                             <label>Phone Number</label>
-                            <input type="tel" id="reg-phone" placeholder="+234..." required>
+                            <input type="tel" name="phone_number" id="reg-phone" placeholder="+234..." required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group half">
                             <label>Department</label>
-                            <input type="text" id="reg-dept" placeholder="e.g. Software Engineering" required>
+                            <input type="text" name="department" id="reg-dept" placeholder="e.g. Software Engineering" required>
                         </div>
                         <div class="form-group half">
                             <label>Level</label>
                             <div class="select-wrapper">
-                                <select id="reg-level" required>
+                                <select name="level" id="reg-level" required>
                                     <option value="" disabled selected>Select Level</option>
                                     <option value="100">100</option>
                                     <option value="200">200</option>
@@ -65,9 +66,11 @@
                     <div class="form-group">
                         <label>Select Trade</label>
                         <div class="select-wrapper">
-                            <select id="reg-trade" required>
-                                <option value="" disabled selected>Loading trades...</option>
-                                <!-- Options populated by JS -->
+                            <select name="trade_id" id="reg-trade" required>
+                                <option value="" disabled selected>Select Trade</option>
+                                @foreach($trades as $trade)
+                                    <option value="{{ $trade->id }}">{{ $trade->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <small id="trade-capacity-hint" class="hint-text"></small>
