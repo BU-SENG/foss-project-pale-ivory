@@ -57,7 +57,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">Pale Ivory</div>
+        <div class="logo">BUEPS</div>
         <div class="receipt-title">Payment Receipt</div>
         <div style="margin-top: 10px;">Date: {{ now()->format('F j, Y') }}</div>
     </div>
@@ -103,7 +103,7 @@
 
     <div class="footer">
         <p>This is an electronically generated receipt.</p>
-        <p>&copy; {{ date('Y') }} Pale Ivory. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} Babcock University Entrepreneurship Payment System. All rights reserved.</p>
     </div>
 </body>
 </html>
