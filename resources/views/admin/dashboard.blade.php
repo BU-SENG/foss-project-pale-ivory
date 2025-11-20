@@ -82,21 +82,21 @@
                         <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
                         <div class="stat-info">
                             <h3>Total Students</h3>
-                            <p id="stat-total-students">0</p>
+                            <p id="stat-total-students">{{ $totalStudents }}</p>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon green"><i class="fa-solid fa-briefcase"></i></div>
                         <div class="stat-info">
                             <h3>Active Trades</h3>
-                            <p id="stat-total-trades">0</p>
+                            <p id="stat-total-trades">{{ $activeTrades }}</p>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon purple"><i class="fa-solid fa-check-circle"></i></div>
                         <div class="stat-info">
                             <h3>Total Capacity</h3>
-                            <p id="stat-total-capacity">0</p>
+                            <p id="stat-total-capacity">{{ $totalCapacity }}</p>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,29 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach($trades as $trade)
+                                <tr>
+                                    <td>{{ $trade->name }}</td>
+                                    <td>{{ $trade->capacity }}</td>
+                                    <td>{{ $trade->users_count }}</td>
+                                    <td>
+                                        @if($trade->users_count >= $trade->capacity)
+                                            <span class="badge red">Full</span>
+                                        @else
+                                            <span class="badge green">Available</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('admin.trades.destroy', $trade) }}" method="POST" onsubmit="return confirm('Are you sure?')" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-icon red"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -147,13 +169,21 @@
                             <thead>
                                     <tr>
                                     <th>Student Name</th>
-                                    <th>Matric No</th>
-                                    <th>Department</th>
+                                    <th>Email</th>
                                     <th>Trade</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach($students as $student)
+                                <tr>
+                                    <td>{{ $student->name }}</td>
+                                    <td>{{ $student->email }}</td>
+                                    <td>{{ $student->trade ? $student->trade->name : 'None' }}</td>
+                                    <td><span class="badge green">Active</span></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -173,13 +203,32 @@
                         <table id="admins-table">
                             <thead>
                                 <tr>
-                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
                                     <th>Role</th>
                                     <th>Created</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach($admins as $admin)
+                                <tr>
+                                    <td>{{ $admin->name }}</td>
+                                    <td>{{ $admin->email }}</td>
+                                    <td>{{ $admin->role }}</td>
+                                    <td>{{ $admin->created_at->format('Y-m-d') }}</td>
+                                    <td>
+                                        @if($admin->id !== auth()->guard('admin')->id())
+                                        <form action="{{ route('admin.admins.destroy', $admin) }}" method="POST" onsubmit="return confirm('Are you sure?')" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-icon red"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -194,14 +243,15 @@
                 <h3>Add New Trade</h3>
                 <button class="close-modal" onclick="toggleModal('add-trade-modal')">&times;</button>
             </div>
-            <form id="add-trade-form">
+            <form action="{{ route('admin.trades.store') }}" method="POST">
+                @csrf
                 <div class="form-group">
                     <label>Trade Name</label>
-                    <input type="text" id="new-trade-name" required>
+                    <input type="text" name="name" required>
                 </div>
                 <div class="form-group">
                     <label>Capacity</label>
-                    <input type="number" id="new-trade-cap" required>
+                    <input type="number" name="capacity" required>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-secondary" onclick="toggleModal('add-trade-modal')">Cancel</button>
@@ -217,19 +267,24 @@
                 <h3>Create New Admin</h3>
                 <button class="close-modal" onclick="toggleModal('add-admin-modal')">&times;</button>
             </div>
-            <form id="create-admin-form">
+            <form action="{{ route('admin.admins.store') }}" method="POST">
+                @csrf
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="new-admin-user" required>
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="new-admin-pass" required>
+                    <input type="password" name="password" required>
                 </div>
                 <div class="form-group">
                     <label>Role</label>
                     <div class="select-wrapper">
-                        <select id="new-admin-role">
+                        <select name="role">
                             <option value="admin">Entrepreneurship Admin</option>
                             <option value="superadmin">Super Admin</option>
                         </select>

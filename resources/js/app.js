@@ -54,10 +54,10 @@ function navigateAdminContent(targetId) {
         }
     });
 
-    // Refresh data
-    if (targetId === 'admin-trades-view') renderTradesTable();
-    if (targetId === 'admin-students-view') renderStudentsTable();
-    if (targetId === 'admin-dashboard-home') updateDashboardStats();
+    // Refresh data - REMOVED
+    // if (targetId === 'admin-trades-view') renderTradesTable();
+    // if (targetId === 'admin-students-view') renderStudentsTable();
+    // if (targetId === 'admin-dashboard-home') updateDashboardStats();
 
     // Close sidebar on mobile
     if (window.innerWidth <= 768) {
@@ -82,7 +82,7 @@ window.toggleModal = function(modalId) {
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Dashboard Logic
     if (pages.dashboard) {
-        updateDashboardStats();
+        // updateDashboardStats(); // REMOVED
 
         // Admin Sidebar Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -99,25 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(menuBtn) menuBtn.addEventListener('click', () => document.getElementById('sidebar').classList.add('open'));
         if(closeBtn) closeBtn.addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
 
-        // Admin Forms
-        const addTradeForm = document.getElementById('add-trade-form');
-        if(addTradeForm) {
-            addTradeForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('new-trade-name').value;
-                const cap = parseInt(document.getElementById('new-trade-cap').value);
-                
-                const trades = Storage.getTrades();
-                trades.push({ id: Date.now(), name, capacity: cap, enrolled: 0 });
-                Storage.setTrades(trades);
-                
-                renderTradesTable();
-                toggleModal('add-trade-modal');
-                e.target.reset();
-            });
-        }
-
-
+        // Admin Forms - REMOVED
     }
 
 
@@ -208,93 +190,18 @@ function populateTradeDropdown() {
 }
 
 function updateDashboardStats() {
-    const students = Storage.getStudents();
-    const trades = Storage.getTrades();
-    
-    const statStudents = document.getElementById('stat-total-students');
-    const statTrades = document.getElementById('stat-total-trades');
-    const statCap = document.getElementById('stat-total-capacity');
-
-    if(statStudents) statStudents.textContent = students.length;
-    if(statTrades) statTrades.textContent = trades.length;
-    
-    if(statCap) {
-        const totalCap = trades.reduce((acc, curr) => acc + curr.capacity, 0);
-        statCap.textContent = totalCap;
-    }
+    // Removed: Handled by Laravel
 }
 
 function renderTradesTable() {
-    const trades = Storage.getTrades();
-    const tbody = document.querySelector('#trades-table tbody');
-    if(!tbody) return;
-
-    tbody.innerHTML = '';
-    
-    trades.forEach(trade => {
-        const tr = document.createElement('tr');
-        const percent = Math.round((trade.enrolled / trade.capacity) * 100);
-        
-        tr.innerHTML = `
-            <td><strong>${trade.name}</strong></td>
-            <td>${trade.capacity}</td>
-            <td>${trade.enrolled}</td>
-            <td>
-                <div style="width: 100px; height: 6px; background: #eee; border-radius: 3px; overflow: hidden;">
-                    <div style="width: ${percent}%; height: 100%; background: ${percent > 90 ? 'red' : '#10b981'};"></div>
-                </div>
-                <small>${percent}% Full</small>
-            </td>
-            <td>
-                <button class="btn-danger" onclick="deleteTrade(${trade.id})"><i class="fa-solid fa-trash"></i></button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
+    // Removed: Handled by Laravel
 }
 
 function renderStudentsTable() {
-    const students = Storage.getStudents();
-    const tbody = document.querySelector('#students-table tbody');
-    const filterEl = document.getElementById('filter-trade');
-    
-    if(!tbody) return;
-
-    const filter = filterEl ? filterEl.value : 'all';
-    
-    // Update filter dropdown if needed
-    if (filterEl && filterEl.options.length === 1) {
-        const trades = Storage.getTrades();
-        trades.forEach(t => {
-            filterEl.innerHTML += `<option value="${t.name}">${t.name}</option>`;
-        });
-    }
-
-    tbody.innerHTML = '';
-    students.forEach(s => {
-        if (filter !== 'all' && s.trade !== filter) return;
-        
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>
-                <div style="font-weight: 500;">${s.name}</div>
-                <small style="color: #666;">${s.email}</small>
-            </td>
-            <td>${s.matric}</td>
-            <td>${s.dept}</td>
-            <td>${s.trade}</td>
-            <td><span style="background: #dcfce7; color: #16a34a; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${s.paymentStatus}</span></td>
-        `;
-        tbody.appendChild(tr);
-    });
+    // Removed: Handled by Laravel
 }
 
 // Global Actions
 window.deleteTrade = function(id) {
-    if(!confirm('Delete this trade?')) return;
-    let trades = Storage.getTrades();
-    trades = trades.filter(t => t.id !== id);
-    Storage.setTrades(trades);
-    renderTradesTable();
-    updateDashboardStats();
+    // Removed: Handled by Laravel
 }
