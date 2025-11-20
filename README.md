@@ -27,12 +27,13 @@
 <h2 style="font-size: 32px;">Tools</h2>
 <ul>
   <li>Figma – a design tool used mainly for creating UI/UX designs.</li>
+<li>PHP - used for backend development and server-side logic.
+Paystack– integrated as the secure online payment gateway for processing student transactions.</li>
 </ul>
 
 <br>
 
 <h2 style="font-size: 32px;">HOW TO USE THIS REPO</h2>
-
 <ol>
   <li>Clone the project. Open your terminal and use the following command:</li>
 </ol>
