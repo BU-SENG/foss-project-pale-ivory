@@ -69,12 +69,37 @@
                             <select name="trade_id" id="reg-trade" required>
                                 <option value="" disabled selected>Select Trade</option>
                                 @foreach($trades as $trade)
-                                    <option value="{{ $trade->id }}">{{ $trade->name }}</option>
+                                <option value="{{ $trade->id }}">{{ $trade->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <small id="trade-capacity-hint" class="hint-text"></small>
                     </div>
+
+                    @if (session()->has('message'))
+                    <div class="alert alert-{{ session('message')['type'] }}" style="color: {{ session('message')['type'] == 'error' ? 'red' : 'green' }}; margin-bottom: 15px;">
+                        {{ session('message')['msg'] }}
+                    </div>
+                    @endif
+                    @if (session('success'))
+                    <div class="alert alert-success" style="color: green; margin-bottom: 15px;">
+                        {{ session('success') }}
+                    </div>
+                    @endif
+                    @if (session('error'))
+                    <div class="alert alert-danger" style="color: red; margin-bottom: 15px;">
+                        {{ session('error') }}
+                    </div>
+                    @endif
+                    @if ($errors->any())
+                    <div class="alert alert-danger" style="color: red; margin-bottom: 15px;">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
 
                     <div class="form-actions">
                         <button type="submit" class="btn-primary full-width">

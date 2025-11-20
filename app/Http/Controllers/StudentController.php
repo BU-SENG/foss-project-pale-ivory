@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Trade;
+use Illuminate\Support\Facades\Redirect;
 
 class StudentController extends Controller
 {
@@ -26,8 +27,23 @@ class StudentController extends Controller
             'trade_id' => 'required|exists:trades,id',
         ]);
 
-        Student::create($validated);
+        $student = Student::create($validated);
 
-        return redirect()->route('home')->with('success', 'Registration successful!');
+        try {
+            $data = [
+                "amount" => 15000 * 100,
+                "reference" => paystack()->genTranxRef(),
+                "email" => $student->email,
+                "currency" => "NGN",
+                "metadata" => [
+                    'student_id' => $student->id,
+                    'matric_number' => $student->matric_number,
+                ],
+            ];
+
+            return paystack()->getAuthorizationUrl($data)->redirectNow();
+        } catch (\Exception $e) {
+            return Redirect::back()->withMessage(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
+        }
     }
 }

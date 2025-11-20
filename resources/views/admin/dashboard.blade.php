@@ -158,6 +158,9 @@
                     <div class="header-actions">
                         <select id="filter-trade" class="form-select-sm">
                             <option value="all">All Trades</option>
+                            @foreach($trades as $trade)
+                                <option value="{{ $trade->id }}">{{ $trade->name }}</option>
+                            @endforeach
                         </select>
                         <button class="btn-secondary" onclick="renderStudentsTable()"><i class="fa-solid fa-rotate"></i></button>
                     </div>
