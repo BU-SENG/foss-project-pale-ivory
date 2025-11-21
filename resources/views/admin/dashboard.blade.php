@@ -130,6 +130,8 @@
                                     <td>{{ $trade->capacity }}</td>
                                     <td>{{ $trade->students_count }}</td>
                                     <td>
+                                        <button class="btn-primary" onclick="acceptTrade({{ $trade->id }})">Accept</button>
+                                        <button class="btn-danger" onclick="dropTrade({{ $trade->id }})">Drop</button>
                                         @if($trade->students_count >= $trade->capacity)
                                             <span class="badge red">Full</span>
                                         @else
