@@ -79,6 +79,16 @@ function populateTradeDropdown() {
     const trades = Storage.getTrades();
     const select = document.getElementById('reg-trade');
     const hint = document.getElementById('trade-capacity-hint');
+
+function acceptTrade(tradeId) {
+    // Implement accept logic (AJAX or form submission)
+    alert('Accepted trade ' + tradeId);
+}
+
+function dropTrade(tradeId) {
+    // Implement drop logic (AJAX or form submission)
+    alert('Dropped trade ' + tradeId);
+}
     
     if(!select) return;
 
