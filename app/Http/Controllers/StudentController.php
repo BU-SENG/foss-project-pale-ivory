@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Redirect;
 
 class StudentController extends Controller
 {
-    public function show()
+    public function index()
+    {
+        return view('index');
+    }
+
+    public function showRegister()
     {
         $trades = Trade::all();
-        return view('index', compact('trades'));
+        return view('register', compact('trades'));
     }
 
     public function store(Request $request)
