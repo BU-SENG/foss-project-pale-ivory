@@ -10,13 +10,6 @@
 </head>
 <body>
     <div class="dashboard-layout">
-        <!-- Mobile Header -->
-        <header class="mobile-header">
-            <button id="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
-            <span class="brand">BUEPS Admin</span>
-            <div class="user-avatar-sm"><i class="fa-regular fa-user"></i></div>
-        </header>
-
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -70,11 +63,20 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Mobile Header -->
+            <header class="mobile-header">
+                <button id="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+                <span class="brand">BUEPS Admin</span>
+                <div class="user-avatar-sm"><i class="fa-regular fa-user"></i></div>
+            </header>
+            
             <!-- Dashboard Home -->
             <section id="admin-dashboard-home" class="content-section active">
                 <div class="section-header">
-                    <h1>Dashboard Overview</h1>
-                    <p>Welcome back to the Administration Panel.</p>
+                    <div>
+                        <h1>Dashboard Overview</h1>
+                        <p>Welcome back to the Administration Panel.</p>
+                    </div>
                 </div>
                 
                 <div class="stats-grid">

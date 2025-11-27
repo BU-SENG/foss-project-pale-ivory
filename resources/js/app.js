@@ -37,7 +37,10 @@ function navigateAdminContent(targetId) {
     // Close sidebar on mobile
     if (window.innerWidth <= 768) {
         const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
         if(sidebar) sidebar.classList.remove('open');
+        if(overlay) overlay.classList.remove('active');
+        document.body.style.overflow = '';
     }
 }
 
@@ -65,11 +68,51 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Create overlay element for mobile sidebar
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        overlay.id = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+
+        const sidebar = document.getElementById('sidebar');
+        
         // Mobile Sidebar Toggle
         const menuBtn = document.getElementById('mobile-menu-btn');
         const closeBtn = document.getElementById('close-sidebar-btn');
-        if(menuBtn) menuBtn.addEventListener('click', () => document.getElementById('sidebar').classList.add('open'));
-        if(closeBtn) closeBtn.addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
+        
+        function openSidebar() {
+            if(sidebar) {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeSidebar() {
+            if(sidebar) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        if(menuBtn) menuBtn.addEventListener('click', openSidebar);
+        if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+        
+        // Close sidebar on window resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeSidebar();
+            }
+        });
+        
+        // Close sidebar on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
+                closeSidebar();
+            }
+        });
 
     }
 });
