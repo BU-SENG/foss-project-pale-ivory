@@ -6,7 +6,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [StudentController::class, 'show'])->name('home');
+Route::get('/', [StudentController::class, 'index'])->name('home');
+Route::get('/register', [StudentController::class, 'showRegister'])->name('register');
 Route::post('/register', [StudentController::class, 'store'])->name('student.register');
 
 Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallback']);
