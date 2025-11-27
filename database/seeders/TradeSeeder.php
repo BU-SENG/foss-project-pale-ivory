@@ -23,7 +23,10 @@ class TradeSeeder extends Seeder
         ];
 
         foreach ($trades as $trade) {
-            Trade::firstOrCreate(['name' => $trade]);
+            Trade::firstOrCreate(
+                ['name' => $trade],
+                ['capacity' => 100]
+            );
         }
     }
 }
